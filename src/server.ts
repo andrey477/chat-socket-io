@@ -4,6 +4,7 @@ import cors from 'cors';
 import http from 'http';
 import { Server } from 'socket.io';
 import {ChatController} from "./controllers/ChatController";
+import * as path from "path";
 
 const PORT = 5000;
 
@@ -11,6 +12,12 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.disable('etag'); /** исправление 304 статус кода **/
+
+app.use(express.static(path.join(__dirname, 'client', 'build')));
+
+app.get('/', function (req, res) {
+	res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
 
 const server = http.createServer(app);
 const io = new Server(server);
