@@ -1,7 +1,6 @@
-import {FC, useEffect, useMemo, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {io} from "socket.io-client";
-import {useLocation, useParams} from 'react-router-dom';
-import {Message} from "../../components/Message";
+import {useLocation} from 'react-router-dom';
 import {useFormik} from "formik";
 import {Input} from "../../components/Input";
 import {Button} from "../../components/Button";

@@ -1,4 +1,4 @@
-import {FC, useCallback, useMemo} from 'react';
+import {FC, useCallback} from 'react';
 import {IMessage} from "../../types";
 import {Message} from "../Message";
 
