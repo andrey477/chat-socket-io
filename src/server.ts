@@ -5,8 +5,9 @@ import http from 'http';
 import { Server } from 'socket.io';
 import {ChatController} from "./controllers/ChatController";
 import * as path from "path";
+import {config} from "./utils/config";
 
-const PORT = 5000;
+const PORT = config.port || 5000;
 
 const app = express();
 app.use(express.json());
