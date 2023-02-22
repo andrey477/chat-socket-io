@@ -25,7 +25,7 @@ export const LoginPage: FC<Props> = () => {
 
   return (
     <div className="flex h-screen bg-extend-midnight">
-      <form onSubmit={handleSubmit} className="container w-1/4 m-auto">
+      <form onSubmit={handleSubmit} className="container w-full lg:w-1/4 m-auto p-4">
         <Input
           id="username"
           name="username"

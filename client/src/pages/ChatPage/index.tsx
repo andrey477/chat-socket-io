@@ -57,7 +57,7 @@ export const ChatPage: FC<Props> = () => {
 
   return (
     <div className="flex-1 p:2 sm:p-6 h-screen bg-extend-midnight overflow-hidden">
-      <div className="justify-between flex flex-col w-1/2 mx-auto h-screen p-4">
+      <div className="justify-between flex flex-col w-full lg:w-1/2 mx-auto h-screen p-2">
         <MessagesBlock messages={messages} username={username}/>
         <form
           className="flex mh-40 w-full"
@@ -73,6 +73,7 @@ export const ChatPage: FC<Props> = () => {
           <Button
             type='submit'
             disabled={!values.message.length}
+            className="ml-2"
           >Send</Button>
         </form>
       </div>
