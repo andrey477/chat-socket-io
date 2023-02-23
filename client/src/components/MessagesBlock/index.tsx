@@ -1,6 +1,6 @@
-import {FC, useCallback} from 'react';
+import {FC} from 'react';
 import {IMessage} from "../../types";
-import {Message} from "../Message";
+import {Message} from "../../commons/Message";
 
 interface Props {
   messages: IMessage[];
@@ -8,20 +8,25 @@ interface Props {
 }
 
 export const MessagesBlock: FC<Props> = ({ messages, username }) => {
-  const isMyMessage = (message: IMessage) => {
-    return username === message.username;
+  const variant = (message: IMessage) => {
+    return username === message.username ? 'right' : 'left';
   }
 
-  const style = useCallback((message: IMessage) => {
-    return [
-      isMyMessage(message) ? 'items-end' : 'items-start',
-    ].join(' ').concat(' ', 'flex flex-col space-y-2 text-xs mx-auto mx-2 order-2 items-start');
-  }, [messages]);
+  const style = {
+    variant: {
+      left: 'items-start',
+      right: 'items-end',
+    }
+  }
+
   return (
     <div className="flex flex-col space-y-4 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
       {messages.map((message) => (
-        <div className={style(message)}>
-          <Message isMyMessage={isMyMessage(message)}>
+        <div className={`
+        flex flex-col space-y-2 text-xs mx-auto mx-2 order-2 items-start
+        ${style.variant[variant(message)]}
+        `}>
+          <Message variant={variant(message)}>
             {message.text}
           </Message>
         </div>

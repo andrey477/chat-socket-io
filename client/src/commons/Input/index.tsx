@@ -31,7 +31,10 @@ export const Input: FC<Props> = ({
         </label>
       }
       <input
-        className={`bg-black/25 shadow appearance-none border rounded-lg w-full py-2 px-3 text-white mb-2 ${className}`}
+        className={`
+        bg-black/25 shadow appearance-none border rounded-lg w-full py-2 px-3 
+        text-white mb-2 ${className}
+        `}
         id={id}
         type={type}
         name={name}

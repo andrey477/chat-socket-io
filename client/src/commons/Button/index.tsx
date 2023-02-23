@@ -12,21 +12,13 @@ export const Button: FC<PropsWithChildren<Props>> = ({
   children,
   className = '',
 }) => {
-  const style = useMemo(() => {
-    return [
-      disabled ? 'disabled:bg-blue-400' : '',
-    ].filter(Boolean)
-      .join(' ')
-      .concat(' ',
-        'w-28 h-11 bg-blue-600 hover:bg-blue-400 text-white font-bold rounded transition duration-300 ease-in-out',
-        ' ',
-        className
-      );
-  }, [disabled, className]);
 
   return (
     <button
-      className={style}
+      className={`
+      w-28 h-11 text-white font-bold rounded transition duration-300 ease-in-out
+      bg-blue-600 hover:bg-blue-400 disabled:bg-blue-400 ${className}
+      `}
       type={type}
       disabled={disabled}
     >

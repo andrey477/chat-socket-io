@@ -1,20 +1,19 @@
-import { FC } from 'react';
-import {Route, Switch} from "react-router-dom";
-import {LoginPage} from "../pages/LoginPage";
-import {ChatPage} from "../pages/ChatPage";
+import {Redirect, Route, Switch} from "react-router-dom";
+import {routes} from "./config";
 
-interface Props {
-
-}
-
-export const Routes: FC<Props> = () => {
+export const Routes = () => {
   return (
     <Switch>
+      {routes.map(({ exact, path, component}) => (
+        <Route exact={exact} path={path}>
+          {component}
+        </Route>
+      ))}
       <Route exact path='/'>
-        <LoginPage />
+        <Redirect to='/login'/>
       </Route>
-      <Route exact path='/chat'>
-        <ChatPage />
+      <Route path='*'>
+        <Redirect to='/login'/>
       </Route>
     </Switch>
   );
