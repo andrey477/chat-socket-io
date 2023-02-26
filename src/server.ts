@@ -2,10 +2,14 @@ import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
 import http from 'http';
-import { Server } from 'socket.io';
+import {Server} from 'socket.io';
 import {ChatController} from "./controllers/ChatController";
 import * as path from "path";
 import {config} from "./utils/config";
+import {database} from "./data-source";
+import session from 'express-session';
+import router from "./routes";
+import passport from "passport";
 
 const PORT = config.port || 5000;
 
@@ -20,30 +24,56 @@ app.get('/', function (req, res) {
 	res.sendFile(path.resolve(__dirname, '../client/build/index.html'));
 });
 
+app.use(passport.initialize());
+
+app.use(session({
+	secret: 'secret',
+	resave: false,
+	saveUninitialized: false,
+}));
+
+app.use(passport.authenticate('session'));
+
+app.use('/api', router);
+
 const server = http.createServer(app);
 const io = new Server(server);
 const chatController = new ChatController();
 
-io.on('connection', (socket) => {
-	socket.on('join', ({ username, room }) => {
-		socket.join(room);
-		const roomMessages = chatController.getRoomMessages(room);
-		socket.emit('roomMessages', roomMessages);
-		io.to(room).emit('message', {
-			text: `${username} has joined`
+const init = async () => {
+	try {
+		/** Database **/
+		await database.initialize();
+
+		/** Server **/
+		server.listen(PORT, () => {
+			console.log(`server started on http://localhost:${PORT}`);
 		});
-	});
 
-	socket.on('sendMessage', ({ username, room, text }) => {
-		chatController.addMessageToRoom(room, {
-			username,
-			text
-		})
-		io.to(room).emit('message', { username, text });
-	});
+		/** Socket **/
+		io.on('connection', (socket) => {
+			socket.on('join', ({ username, room }) => {
+				socket.join(room);
+				const roomMessages = chatController.getRoomMessages(room);
+				socket.emit('roomMessages', roomMessages);
+				io.to(room).emit('message', {
+					text: `${username} has joined`
+				});
+			});
 
-});
+			socket.on('sendMessage', ({ username, room, text }) => {
+				chatController.addMessageToRoom(room, {
+					username,
+					text
+				})
+				io.to(room).emit('message', { username, text });
+			});
 
-server.listen(PORT, () => {
-	console.log(`server started on http://localhost:${PORT}`);
-});
+		});
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+init();
+
