@@ -1,6 +1,7 @@
 import {DataSource} from "typeorm";
-import {UserModel} from "./models/UserModel";
-import {config} from "./utils/config";
+import {UserModel} from "../models/UserModel";
+import {config} from "./config";
+import {Pool} from "pg";
 
 export const database = new DataSource({
 	type: "postgres",
@@ -14,4 +15,12 @@ export const database = new DataSource({
 	entities: [UserModel],
 	subscribers: [],
 	migrations: [],
-})
+});
+
+export const pool = new Pool({
+	user: config.db_username,
+	password: config.db_password,
+	host: config.db_host,
+	port: config.db_port,
+	database: config.db_name
+});

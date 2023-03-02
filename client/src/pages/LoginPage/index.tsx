@@ -1,6 +1,11 @@
+import { FC } from 'react';
 import {LoginCard} from "../../features/LoginCard";
 
-export const LoginPage = () => {
+interface Props {
+
+}
+
+export const LoginPage: FC<Props> = () => {
   return (
     <LoginCard/>
   );

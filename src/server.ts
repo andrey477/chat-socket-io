@@ -5,15 +5,18 @@ import http from 'http';
 import {Server} from 'socket.io';
 import {ChatController} from "./controllers/ChatController";
 import * as path from "path";
-import {config} from "./utils/config";
-import {database} from "./data-source";
+import {config} from "./configs/config";
+import {database, pool} from "./configs/data-source";
 import session from 'express-session';
 import router from "./routes";
 import passport from "passport";
+import ConnectPgSimple from 'connect-pg-simple';
 
 const PORT = config.port || 5000;
 
 const app = express();
+const PgStore = ConnectPgSimple(session);
+
 app.use(express.json());
 app.use(cors());
 app.disable('etag'); /** исправление 304 статус кода **/
@@ -30,6 +33,13 @@ app.use(session({
 	secret: 'secret',
 	resave: false,
 	saveUninitialized: false,
+	store: new PgStore({
+		pool,
+	}),
+	cookie: {
+		httpOnly: true,
+		maxAge: 60 * 60 * 1000,
+	}
 }));
 
 app.use(passport.authenticate('session'));
