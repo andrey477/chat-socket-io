@@ -1,4 +1,4 @@
-import {api} from "./index";
+import api from "./index";
 import {User} from "../types/user";
 
 export const signUp = async (body: User.SignUp.Request): Promise<void> => {

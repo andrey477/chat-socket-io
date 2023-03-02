@@ -18,7 +18,12 @@ export class AuthController {
 			username: savedUser.username
 		}, (err) => {
 			if (err) { return next(err); }
-			res.redirect('/');
+			res.status(200).json({
+				user: {
+					id: savedUser.id,
+					username: savedUser.username
+				}
+			});
 		});
 	}
 }

@@ -1,25 +1,21 @@
-import { FC } from 'react';
 import {useHistory} from "react-router-dom";
 import {useFormik} from "formik";
 import {Input} from "../../commons/Input";
 import {Button} from "../../commons/Button";
+import {observer} from "mobx-react-lite";
+import userStore from '../../store/UserStore';
 
-interface Props {
-
-}
-
-export const JoinRoomCard: FC<Props> = () => {
+export const JoinRoomCard = observer(() => {
   const history = useHistory();
 
   const {values, handleSubmit, handleChange, isValid} = useFormik({
     initialValues: {
-      username: '',
       room: '',
     },
     onSubmit: (values) => {
       history.push('/chat', {
-        username: values.username,
         room: values.room,
+        username: userStore.user?.username
       });
     }
   });
@@ -27,13 +23,6 @@ export const JoinRoomCard: FC<Props> = () => {
   return (
     <div className="flex h-screen bg-extend-midnight">
       <form onSubmit={handleSubmit} className="container w-full lg:w-1/4 m-auto p-4">
-        <Input
-          id="username"
-          name="username"
-          value={values.username}
-          placeholder="username"
-          onChange={handleChange}
-        />
         <Input
           id="room"
           name="room"
@@ -46,4 +35,4 @@ export const JoinRoomCard: FC<Props> = () => {
       </form>
     </div>
   );
-}
+});

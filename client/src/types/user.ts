@@ -1,4 +1,9 @@
 export declare namespace User {
+	interface Data {
+		id: number;
+		username: string;
+	}
+
 	namespace SignUp {
 		interface Request {
 			username: string;

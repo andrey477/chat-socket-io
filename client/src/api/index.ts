@@ -1,5 +1,10 @@
 import axios from "axios";
 
-export const api = axios.create({
+const api = axios.create({});
 
+api.interceptors.response.use(undefined, (error) => {
+	console.log('interceptors');
+	console.log(error);
 });
+
+export default api;

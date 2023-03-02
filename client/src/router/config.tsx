@@ -8,21 +8,25 @@ export const routes: Route[] = [
 	{
 		path: '/signup',
 		exact: true,
-		component: SignUpPage,
+		component: <SignUpPage/>,
+		secured: false,
 	},
 	{
 		path: '/login',
 		exact: true,
-		component: LoginPage,
+		component: <LoginPage/>,
+		secured: false,
 	},
 	{
 		path: '/join-room',
 		exact: true,
-		component: JoinRoomPage,
+		component: <JoinRoomPage/>,
+		secured: true,
 	},
 	{
 		path: '/chat',
 		exact: true,
-		component: ChatPage,
+		component: <ChatPage/>,
+		secured: true,
 	},
 ]

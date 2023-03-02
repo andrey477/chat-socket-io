@@ -1,15 +1,13 @@
-import {FC} from "react";
 import {useHistory} from "react-router-dom";
 import {useFormik} from "formik";
 import {login} from "../../api/auth";
 import {Input} from "../../commons/Input";
 import {Button} from "../../commons/Button";
+import {observer} from "mobx-react-lite";
+import {current} from "../../api/user";
+import userStore from "../../store/UserStore";
 
-interface Props {
-
-}
-
-export const LoginCard: FC<Props> = () => {
+export const LoginCard = observer(() => {
 	const history = useHistory();
 
 	const {values, handleSubmit, handleChange, isValid} = useFormik({
@@ -23,7 +21,9 @@ export const LoginCard: FC<Props> = () => {
 					username: values.username,
 					password: values.password,
 				});
-				history.push('/test');
+				const user = await current();
+				userStore.setUser(user);
+				history.push('/join-room');
 			} catch (error) {
 
 			}
@@ -51,4 +51,4 @@ export const LoginCard: FC<Props> = () => {
 			</form>
 		</div>
 	);
-}
+});

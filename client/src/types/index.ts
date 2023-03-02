@@ -1,4 +1,4 @@
-import {FunctionComponent} from "react";
+import {ReactNode} from "react";
 
 export interface IMessage {
 	username: string;
@@ -8,5 +8,6 @@ export interface IMessage {
 export interface Route {
 	exact: boolean;
 	path: string;
-	component: FunctionComponent;
+	component: ReactNode;
+	secured: boolean;
 }
