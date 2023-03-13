@@ -10,12 +10,11 @@ import {database, pool} from "./configs/data-source";
 import session from 'express-session';
 import router from "./routes";
 import passport from "passport";
-import ConnectPgSimple from 'connect-pg-simple';
+import {sessionMiddleware, wrap} from "./middlewares/auth";
 
 const PORT = config.port || 5000;
 
 const app = express();
-const PgStore = ConnectPgSimple(session);
 
 app.use(express.json());
 app.use(cors());
@@ -29,18 +28,7 @@ app.get('/', function (req, res) {
 
 app.use(passport.initialize());
 
-app.use(session({
-	secret: 'secret',
-	resave: false,
-	saveUninitialized: false,
-	store: new PgStore({
-		pool,
-	}),
-	cookie: {
-		httpOnly: true,
-		maxAge: 60 * 60 * 1000,
-	}
-}));
+app.use(sessionMiddleware);
 
 app.use(passport.authenticate('session'));
 
@@ -49,6 +37,19 @@ app.use('/api', router);
 const server = http.createServer(app);
 const io = new Server(server);
 const chatController = new ChatController();
+
+io.use(wrap(sessionMiddleware));
+io.use(wrap(passport.initialize()));
+io.use(wrap(passport.session()));
+io.use((socket, next) => {
+	// @ts-ignore
+	if (socket.request.user) {
+		next();
+	} else {
+		next(new Error('unauthorized'))
+	}
+});
+
 
 const init = async () => {
 	try {
